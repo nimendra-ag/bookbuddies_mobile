@@ -51,41 +51,68 @@ class _HomeState extends State<Home> {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20.0),
                     child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(10),
+                      elevation: 3.0,
+                      borderRadius: BorderRadius.circular(12),
                       child: Container(
-                        padding: const EdgeInsets.all(20.0),
-                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(16.0),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Name: ${ds['Name']}",
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Icon(
+                                    Icons.book,
+                                    color: Colors.blue.shade400,
+                                    size: 30.0,
+                                  ),
+                                ),
+                                Text(
+                                  "${ds['Name']}",
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
+                            const SizedBox(height: 8.0),
                             Text(
-                              "Age: ${ds['Age']}",
-                              style: const TextStyle(
-                                color: Colors.orange,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              "By ${ds['Author']}",
+                              style: const TextStyle(fontSize: 16.0),
                             ),
+                            const SizedBox(height: 8.0),
                             Text(
-                              "Location: ${ds['Location']}",
-                              style: const TextStyle(
-                                color: Colors.green,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              "${ds['Description']}",
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Row(
+                              children: [
+                                const Icon(Icons.phone, color: Colors.green),
+                                const SizedBox(width: 10),
+                                Text(
+                                  "${ds['Contact Number']}",
+                                  style: const TextStyle(fontSize: 16.0),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8.0),
+                            Row(
+                              children: [
+                                const Icon(Icons.location_pin,
+                                    color: Colors.red),
+                                const SizedBox(width: 10),
+                                Text(
+                                  "${ds['Location']}",
+                                  style: const TextStyle(fontSize: 16.0),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -94,7 +121,7 @@ class _HomeState extends State<Home> {
                   );
                 },
               )
-            : const Center(child: Text("No matching employees found"));
+            : const Center(child: Text("No matching books found"));
       },
     );
   }
@@ -108,9 +135,12 @@ class _HomeState extends State<Home> {
       },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search),
-        hintText: "Search by name",
+        hintText: "Search by book",
+        filled: true,
+        fillColor: Colors.grey.shade200,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
         ),
       ),
     );
@@ -120,42 +150,28 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Employee()),
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
+        tooltip: "Add New Book",
       ),
       appBar: AppBar(
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Flutter ',
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Firebase',
-              style: TextStyle(
-                color: Colors.orange,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        title: const Text(
+          'Employee Manager',
+          style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
       ),
       body: Container(
-        margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
+        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Column(
           children: [
-            searchBar(), // Add the search bar at the top
+            searchBar(),
             const SizedBox(height: 10.0),
             Expanded(child: allEmployeeDetails()),
           ],
@@ -164,6 +180,7 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
 
 
 // Platform  Firebase App Id

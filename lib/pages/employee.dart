@@ -12,129 +12,159 @@ class Employee extends StatefulWidget {
 
 class _EmployeeState extends State<Employee> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
+  TextEditingController authorController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController contactNumberController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Employee ',
-            style: TextStyle(
-                color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.orange],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-          Text(
-            'Form',
-            style: TextStyle(
-                color: Colors.orange,
-                fontSize: 24,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      )),
-      body: Container(
-        margin: EdgeInsets.only(left: 20.0, top: 30.0, right: 20.0),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Book Form',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Name",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold),
+            buildTextField(
+              label: "Name",
+              icon: Icons.person,
+              controller: nameController,
+              hintText: "Enter the name of the book",
             ),
-            Container(
-              padding: EdgeInsets.only(left: 10.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all()),
-              child: TextField(
-                controller: nameController,
-                decoration: InputDecoration(border: InputBorder.none),
-              ),
+            const SizedBox(height: 20),
+            buildTextField(
+              label: "Author",
+              icon: Icons.edit,
+              controller: authorController,
+              hintText: "Enter the author's name",
             ),
-            SizedBox(
-              height: 20.0,
+            const SizedBox(height: 20),
+            buildTextField(
+              label: "Description",
+              icon: Icons.description,
+              controller: descriptionController,
+              hintText: "Enter a brief description",
             ),
-            Text(
-              "Age",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold),
+            const SizedBox(height: 20),
+            buildTextField(
+              label: "Contact Number",
+              icon: Icons.phone,
+              controller: contactNumberController,
+              hintText: "Enter contact number",
+              keyboardType: TextInputType.phone,
             ),
-            Container(
-              padding: EdgeInsets.only(left: 10.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all()),
-              child: TextField(
-                controller: ageController,
-                decoration: InputDecoration(border: InputBorder.none),
-              ),
+            const SizedBox(height: 20),
+            buildTextField(
+              label: "Location",
+              icon: Icons.location_on,
+              controller: locationController,
+              hintText: "Enter the location",
             ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Text(
-              "Location",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 10.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all()),
-              child: TextField(
-                controller: locationController,
-                decoration: InputDecoration(border: InputBorder.none),
-              ),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
+            const SizedBox(height: 30),
             Center(
               child: ElevatedButton(
-                  onPressed: () async {
-                    String Id = randomAlphaNumeric(10);
-                    Map<String, dynamic> employeeInfoMap = {
-                      "Name": nameController.text,
-                      "Age": ageController.text,
-                      "Id": Id,
-                      "Location": locationController.text
-                    };
-                    nameController.text = "";
-                    ageController.text = "";
-                    locationController.text = "";
-                    
-                    await DatabaseMethods()
-                        .addEmployeeDetails(employeeInfoMap, Id)
-                        .then((value) {
-                      Fluttertoast.showToast(
-                          msg: "Employee data added succesfully",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
-                    });
-                  },
-                  child: Text(
-                    "Add",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  )),
-            )
+                onPressed: () async {
+                  String id = randomAlphaNumeric(10);
+                  Map<String, dynamic> employeeInfoMap = {
+                    "Name": nameController.text,
+                    "Author": authorController.text,
+                    "Id": id,
+                    "Description": descriptionController.text,
+                    "Contact Number": contactNumberController.text,
+                    "Location": locationController.text,
+                  };
+                  nameController.clear();
+                  authorController.clear();
+                  descriptionController.clear();
+                  contactNumberController.clear();
+                  locationController.clear();
+
+                  await DatabaseMethods()
+                      .addEmployeeDetails(employeeInfoMap, id)
+                      .then((value) {
+                    Fluttertoast.showToast(
+                      msg: "Book data added successfully",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15, horizontal: 60),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  elevation: 5,
+                  backgroundColor: Colors.blue,
+                ),
+                child: const Text(
+                  "Add",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildTextField({
+    required String label,
+    required IconData icon,
+    required TextEditingController controller,
+    String? hintText,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey, width: 1),
+            color: Colors.grey[200],
+          ),
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            decoration: InputDecoration(
+              prefixIcon: Icon(icon, color: Colors.grey),
+              hintText: hintText,
+              border: InputBorder.none,
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
