@@ -35,11 +35,7 @@ class _BookState extends State<Book> {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.orange],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+           color: Color.fromRGBO(254,216,106, 1), // Updated app bar color
           ),
         ),
         centerTitle: true,
@@ -50,119 +46,141 @@ class _BookState extends State<Book> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildTextField(
-              label: "Name",
-              icon: Icons.person,
-              controller: nameController,
-              hintText: "Enter the name of the book",
-            ),
-            const SizedBox(height: 20),
-            buildTextField(
-              label: "Author",
-              icon: Icons.edit,
-              controller: authorController,
-              hintText: "Enter the author's name",
-            ),
-            const SizedBox(height: 20),
-            buildTextField(
-              label: "Description",
-              icon: Icons.description,
-              controller: descriptionController,
-              hintText: "Enter a brief description",
-            ),
-            const SizedBox(height: 20),
-            buildDropdownField(
-              label: "Category",
-              icon: Icons.category,
-              items: categories,
-              value: selectedCategory,
-              onChanged: (value) {
-                setState(() {
-                  selectedCategory = value!;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            buildTextField(
-              label: "Contact Number",
-              icon: Icons.phone,
-              controller: contactNumberController,
-              hintText: "Enter contact number",
-              keyboardType: TextInputType.phone,
-            ),
-            const SizedBox(height: 20),
-            buildTextField(
-              label: "Location",
-              icon: Icons.location_on,
-              controller: locationController,
-              hintText: "Enter the location",
-            ),
-            const SizedBox(height: 30),
-            Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (selectedCategory == null) {
-                    Fluttertoast.showToast(
-                      msg: "Please select a category",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                    return;
-                  }
-
-                  String id = randomAlphaNumeric(10);
-                  Map<String, dynamic> bookInfoMap = {
-                    "Name": nameController.text,
-                    "Author": authorController.text,
-                    "Id": id,
-                    "Description": descriptionController.text,
-                    "Category": selectedCategory,
-                    "Contact Number": contactNumberController.text,
-                    "Location": locationController.text,
-                  };
-                  nameController.clear();
-                  authorController.clear();
-                  descriptionController.clear();
-                  contactNumberController.clear();
-                  locationController.clear();
+        child: Container(
+          color: Color.fromRGBO(246, 246, 246, 1), // Updated background color
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildTextField(
+                label: "Name",
+                icon: Icons.person,
+                controller: nameController,
+                hintText: "Enter the name of the book",
+              ),
+              const SizedBox(height: 20),
+              buildTextField(
+                label: "Author",
+                icon: Icons.edit,
+                controller: authorController,
+                hintText: "Enter the author's name",
+              ),
+              const SizedBox(height: 20),
+              buildTextField(
+                label: "Description",
+                icon: Icons.description,
+                controller: descriptionController,
+                hintText: "Enter a brief description",
+              ),
+              const SizedBox(height: 20),
+              buildDropdownField(
+                label: "Category",
+                icon: Icons.category,
+                items: categories,
+                value: selectedCategory,
+                onChanged: (value) {
                   setState(() {
-                    selectedCategory = null;
-                  });
-
-                  await DatabaseMethods()
-                      .addBookDetails(bookInfoMap, id)
-                      .then((value) {
-                    Fluttertoast.showToast(
-                      msg: "Book data added successfully",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
+                    selectedCategory = value!;
                   });
                 },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 15, horizontal: 60),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                  elevation: 5,
-                  backgroundColor: Colors.blue,
-                ),
-                child: const Text(
-                  "Add",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              buildTextField(
+                label: "Contact Number",
+                icon: Icons.phone,
+                controller: contactNumberController,
+                hintText: "Enter contact number",
+                keyboardType: TextInputType.phone,
+              ),
+              const SizedBox(height: 20),
+              buildTextField(
+                label: "Location",
+                icon: Icons.location_on,
+                controller: locationController,
+                hintText: "Enter the location",
+              ),
+              const SizedBox(height: 30),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (selectedCategory == null) {
+                      Fluttertoast.showToast(
+                        msg: "Please select a category",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                      return;
+                    }
+
+                    String id = randomAlphaNumeric(10);
+                    Map<String, dynamic> bookInfoMap = {
+                      "Name": nameController.text,
+                      "Author": authorController.text,
+                      "Id": id,
+                      "Description": descriptionController.text,
+                      "Category": selectedCategory,
+                      "Contact Number": contactNumberController.text,
+                      "Location": locationController.text,
+                    };
+                    nameController.clear();
+                    authorController.clear();
+                    descriptionController.clear();
+                    contactNumberController.clear();
+                    locationController.clear();
+                    setState(() {
+                      selectedCategory = null;
+                    });
+
+                    await DatabaseMethods()
+                        .addBookDetails(bookInfoMap, id)
+                        .then((value) {
+                      Fluttertoast.showToast(
+                        msg: "Book data added successfully",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 60),
+                    backgroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    elevation: 5, // Transparent background for gradient
+                  ).copyWith(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent), // Set the background as transparent
+                    shadowColor: MaterialStateProperty.all<Color>(Colors.transparent), // Optional: Remove shadow
+                  ),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(254,216,106, 1), 
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        minHeight: 50.0,
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "Add",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black, // Text color
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

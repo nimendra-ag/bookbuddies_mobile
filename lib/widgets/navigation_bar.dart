@@ -44,16 +44,17 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: screens[currentIndex],
-        bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: Colors.blueAccent,
-          items: _navigationItems,
-          height: 75,
-          animationDuration: const Duration(milliseconds: 300),
-          onTap: (index) => setState(() {
+      backgroundColor: Colors.white,
+      body: screens[currentIndex],
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Color.fromRGBO(246, 246, 246, 1), // Updated color
+        items: _navigationItems,
+        height: 75,
+        animationDuration: const Duration(milliseconds: 300),
+        onTap: (index) => setState(() {
           currentIndex = index;
-          }),
-        ));
+        }),
+      ),
+    );
   }
 }

@@ -13,7 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Stream? EmployeeStream;
   Stream? BookStream;
   String searchQuery = ""; // Holds the current search text
 
