@@ -11,14 +11,26 @@ class Book extends StatefulWidget {
 }
 
 class _BookState extends State<Book> {
-   TextEditingController nameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController authorController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
+  String? selectedCategory; // Selected category for the dropdown
+  final List<String> categories = [
+    "Fiction",
+    "Non-Fiction",
+    "Science",
+    "Biography",
+    "Fantasy",
+    "Mystery",
+    "Self-Help",
+    "History",
+  ]; // Predefined list of categories
+
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -62,6 +74,18 @@ class _BookState extends State<Book> {
               hintText: "Enter a brief description",
             ),
             const SizedBox(height: 20),
+            buildDropdownField(
+              label: "Category",
+              icon: Icons.category,
+              items: categories,
+              value: selectedCategory,
+              onChanged: (value) {
+                setState(() {
+                  selectedCategory = value!;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
             buildTextField(
               label: "Contact Number",
               icon: Icons.phone,
@@ -80,12 +104,25 @@ class _BookState extends State<Book> {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
+                  if (selectedCategory == null) {
+                    Fluttertoast.showToast(
+                      msg: "Please select a category",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                    return;
+                  }
+
                   String id = randomAlphaNumeric(10);
                   Map<String, dynamic> bookInfoMap = {
                     "Name": nameController.text,
                     "Author": authorController.text,
                     "Id": id,
                     "Description": descriptionController.text,
+                    "Category": selectedCategory,
                     "Contact Number": contactNumberController.text,
                     "Location": locationController.text,
                   };
@@ -94,6 +131,9 @@ class _BookState extends State<Book> {
                   descriptionController.clear();
                   contactNumberController.clear();
                   locationController.clear();
+                  setState(() {
+                    selectedCategory = null;
+                  });
 
                   await DatabaseMethods()
                       .addBookDetails(bookInfoMap, id)
@@ -161,6 +201,51 @@ class _BookState extends State<Book> {
               border: InputBorder.none,
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildDropdownField({
+    required String label,
+    required IconData icon,
+    required List<String> items,
+    required String? value,
+    required void Function(String?) onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey, width: 1),
+            color: Colors.grey[200],
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: value,
+              hint: const Text("Select a category"),
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+              isExpanded: true,
+              items: items
+                  .map((category) => DropdownMenuItem<String>(
+                        value: category,
+                        child: Text(category),
+                      ))
+                  .toList(),
+              onChanged: onChanged,
             ),
           ),
         ),

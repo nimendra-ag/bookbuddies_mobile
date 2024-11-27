@@ -105,12 +105,17 @@ class _HomeState extends State<Home> {
                             const SizedBox(height: 8.0),
                             Text(
                               "By ${ds['Author']}",
-                              style: const TextStyle(fontSize: 16.0),
+                              style: const TextStyle(fontSize: 14.0),
                             ),
                             const SizedBox(height: 8.0),
                             Text(
                               "${ds['Description']}",
                               style: const TextStyle(fontSize: 16.0),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              "${ds['Category']}",
+                              style: const TextStyle(fontSize: 14.0),
                             ),
                             const SizedBox(height: 8.0),
                             Row(
