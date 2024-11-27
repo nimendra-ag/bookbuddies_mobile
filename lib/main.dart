@@ -1,6 +1,7 @@
 import 'package:crud/pages/home.dart';
 import 'package:crud/pages/login.dart';
 import 'package:crud/pages/signup.dart';
+import 'package:crud/widgets/navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         '/signUp': (context) => SignupPage(),
-        '/home': (context) => Home(),
+        '/home': (context) => MainNavigationBar(),
       },
     );
   }

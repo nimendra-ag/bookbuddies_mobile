@@ -35,6 +35,7 @@ dependencies:
   cloud_firestore: ^5.4.5
   random_string: ^2.3.1
   fluttertoast: ^8.2.8
+  curved_labeled_navigation_bar: ^2.0.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
