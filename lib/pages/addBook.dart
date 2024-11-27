@@ -3,22 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
 
-class Employee extends StatefulWidget {
-  const Employee({super.key});
+class Book extends StatefulWidget {
+  const Book({super.key});
 
   @override
-  State<Employee> createState() => _EmployeeState();
+  State<Book> createState() => _BookState();
 }
 
-class _EmployeeState extends State<Employee> {
-  TextEditingController nameController = TextEditingController();
+class _BookState extends State<Book> {
+   TextEditingController nameController = TextEditingController();
   TextEditingController authorController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -81,7 +81,7 @@ class _EmployeeState extends State<Employee> {
               child: ElevatedButton(
                 onPressed: () async {
                   String id = randomAlphaNumeric(10);
-                  Map<String, dynamic> employeeInfoMap = {
+                  Map<String, dynamic> bookInfoMap = {
                     "Name": nameController.text,
                     "Author": authorController.text,
                     "Id": id,
@@ -96,7 +96,7 @@ class _EmployeeState extends State<Employee> {
                   locationController.clear();
 
                   await DatabaseMethods()
-                      .addEmployeeDetails(employeeInfoMap, id)
+                      .addBookDetails(bookInfoMap, id)
                       .then((value) {
                     Fluttertoast.showToast(
                       msg: "Book data added successfully",

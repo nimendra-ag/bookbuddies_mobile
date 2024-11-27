@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crud/pages/employee.dart';
+import 'package:crud/pages/addBook.dart';
+import 'package:crud/pages/login.dart'; // Import the login page
 import 'package:crud/service/database.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -12,10 +14,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Stream? EmployeeStream;
+  Stream? BookStream;
   String searchQuery = ""; // Holds the current search text
 
   getontheload() async {
-    EmployeeStream = await DatabaseMethods().getEmployeeDetails();
+    BookStream = await DatabaseMethods().getBookDetails();
+
     setState(() {});
   }
 
@@ -25,15 +29,32 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
+  // Function to sign out
+  Future<void> signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // Navigate to the login page after signing out
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    } catch (e) {
+      // Handle sign-out error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Sign Out Failed: ${e.toString()}")),
+      );
+    }
+  }
+
   Widget allEmployeeDetails() {
     return StreamBuilder(
-      stream: EmployeeStream,
+      stream: BookStream,
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
         if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-          return const Center(child: Text("No employees available"));
+          return const Center(child: Text("No books available"));
         }
 
         // Filter the items based on the search query
@@ -154,7 +175,7 @@ class _HomeState extends State<Home> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const Employee()),
+            MaterialPageRoute(builder: (context) => const Book()),
           );
         },
         child: const Icon(Icons.add, color: Colors.white),
@@ -162,10 +183,17 @@ class _HomeState extends State<Home> {
       ),
       appBar: AppBar(
         title: const Text(
-          'Employee Manager',
+          'Book Buddies',
           style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: signOut, // Sign out when this button is pressed
+            tooltip: "Sign Out",
+          ),
+        ],
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -180,7 +208,6 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
 
 
 // Platform  Firebase App Id
