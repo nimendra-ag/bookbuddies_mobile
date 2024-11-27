@@ -1,3 +1,4 @@
+import 'package:crud/pages/Categories.dart';
 import 'package:crud/pages/addBook.dart';
 import 'package:crud/pages/home.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
@@ -33,9 +34,9 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
 
   final screens = const [
     Home(),
+    Categories(),
     Book(),
     Home(),
-    Book(),
   ];
 
   int currentIndex = 0;
