@@ -15,10 +15,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Stream? BookStream;
   String searchQuery = ""; // Holds the current search text
+  String currentUserId = "";
 
   getontheload() async {
-    BookStream = await DatabaseMethods().getBookDetails();
+    // Get the current user ID from FirebaseAuth
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      currentUserId = user.uid;
+    }
 
+    BookStream = await DatabaseMethods().getBookDetails();
     setState(() {});
   }
 
@@ -56,11 +62,12 @@ class _HomeState extends State<Home> {
           return const Center(child: Text("No books available"));
         }
 
-        // Filter the items based on the search query
+        // Filter the items based on the search query and exclude books uploaded by the current user
         List<DocumentSnapshot> employees = snapshot.data.docs;
         List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
           String name = doc['Name'].toString().toLowerCase();
-          return name.contains(searchQuery.toLowerCase());
+          return name.contains(searchQuery.toLowerCase()) &&
+              doc['UploadedBy'] != currentUserId; // Exclude current user's books
         }).toList();
 
         return filteredEmployees.isNotEmpty
@@ -130,8 +137,7 @@ class _HomeState extends State<Home> {
                             const SizedBox(height: 8.0),
                             Row(
                               children: [
-                                const Icon(Icons.location_pin,
-                                    color: Colors.red),
+                                const Icon(Icons.location_pin, color: Colors.red),
                                 const SizedBox(width: 10),
                                 Text(
                                   "${ds['Location']}",
@@ -212,6 +218,7 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
 
 
 // Platform  Firebase App Id

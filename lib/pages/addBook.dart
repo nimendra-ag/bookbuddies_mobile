@@ -2,6 +2,7 @@ import 'package:crud/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Book extends StatefulWidget {
   const Book({super.key});
@@ -35,7 +36,7 @@ class _BookState extends State<Book> {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-           color: Color.fromRGBO(254,216,106, 1), // Updated app bar color
+            color: Color.fromRGBO(254, 216, 106, 1), // Updated app bar color
           ),
         ),
         centerTitle: true,
@@ -115,6 +116,8 @@ class _BookState extends State<Book> {
                     }
 
                     String id = randomAlphaNumeric(10);
+                    String userId = FirebaseAuth.instance.currentUser!.uid; // Get current user ID
+
                     Map<String, dynamic> bookInfoMap = {
                       "Name": nameController.text,
                       "Author": authorController.text,
@@ -123,7 +126,9 @@ class _BookState extends State<Book> {
                       "Category": selectedCategory,
                       "Contact Number": contactNumberController.text,
                       "Location": locationController.text,
+                      "UploadedBy": userId, // Add the current user's ID
                     };
+
                     nameController.clear();
                     authorController.clear();
                     descriptionController.clear();
@@ -159,7 +164,7 @@ class _BookState extends State<Book> {
                   ),
                   child: Ink(
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(254,216,106, 1), 
+                      color: Color.fromRGBO(254, 216, 106, 1), 
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Container(
