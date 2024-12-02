@@ -1,23 +1,24 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crud/pages/addBook.dart';
-import 'package:crud/pages/login.dart'; 
-import 'package:crud/service/database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:crud/service/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+
+class Mybooks extends StatefulWidget {
+  const Mybooks({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Mybooks> createState() => _MybooksState();
 }
 
-class _HomeState extends State<Home> {
+class _MybooksState extends State<Mybooks> {
+
   Stream? BookStream;
   String searchQuery = ""; 
   String currentUserId = "";
 
-  getontheload() async {
+
+getontheload() async {
     // Get the current user ID from FirebaseAuth
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -28,29 +29,13 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
-  @override
+    @override
   void initState() {
     getontheload();
     super.initState();
   }
 
-  // Function to sign out
-  Future<void> signOut() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      // Navigate to the login page after signing out
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
-    } catch (e) {
-      // Handle sign-out error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Sign Out Failed: ${e.toString()}")),
-      );
-    }
-  }
-
+  
   Widget allEmployeeDetails() {
     return StreamBuilder(
       stream: BookStream,
@@ -67,7 +52,7 @@ class _HomeState extends State<Home> {
         List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
           String name = doc['Name'].toString().toLowerCase();
           return name.contains(searchQuery.toLowerCase()) &&
-              doc['UploadedBy'] != currentUserId; // Exclude current user's books
+              doc['UploadedBy'] == currentUserId; // Exclude current user's books
         }).toList();
 
         return filteredEmployees.isNotEmpty
@@ -157,7 +142,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget searchBar() {
+   Widget searchBar() {
     return TextField(
       onChanged: (value) {
         setState(() {
@@ -177,33 +162,17 @@ class _HomeState extends State<Home> {
     );
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Book()),
-          );
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-        tooltip: "Add New Book",
-      ),
+      
       appBar: AppBar(
         title: const Text(
           'Book Buddies',
           style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: signOut, // Sign out when this button is pressed
-            tooltip: "Sign Out",
-          ),
-        ],
+        
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -218,9 +187,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-
-
-// Platform  Firebase App Id
-// android   1:668028575415:android:10f252bf052fdad54cf732
-// ios       1:668028575415:ios:37d9d603745c35cb4cf732

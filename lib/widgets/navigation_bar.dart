@@ -1,6 +1,7 @@
 import 'package:crud/pages/Categories.dart';
 import 'package:crud/pages/addBook.dart';
 import 'package:crud/pages/home.dart';
+import 'package:crud/pages/myBooks.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,10 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
       child: Icon(Icons.report_outlined),
       label: 'Report',
     ),
+    const CurvedNavigationBarItem(
+      child: Icon(Icons.my_library_books_outlined),
+      label: 'My Books',
+    ),
   ];
 
   final screens = const [
@@ -37,6 +42,7 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
     Categories(),
     Book(),
     Home(),
+    Mybooks()
   ];
 
   int currentIndex = 0;
