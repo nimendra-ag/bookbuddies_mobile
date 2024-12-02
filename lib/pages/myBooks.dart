@@ -1,6 +1,6 @@
+import 'package:crud/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:crud/service/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Mybooks extends StatefulWidget {
@@ -33,16 +33,39 @@ class _MybooksState extends State<Mybooks> {
   }
 
   Future<void> deleteBook(String bookId) async {
-    try {
-      await FirebaseFirestore.instance.collection('Book').doc(bookId).delete();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Book deleted successfully")),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to delete book: ${e.toString()}")),
-      );
-    }
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Delete Confirmation"),
+          content: const Text("Are you sure you want to delete this book?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog without deleting
+              },
+              child: const Text("No"),
+            ),
+            TextButton(
+              onPressed: () async {
+                try {
+                  await FirebaseFirestore.instance.collection('Book').doc(bookId).delete();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Book deleted successfully")),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Failed to delete book: ${e.toString()}")),
+                  );
+                }
+                Navigator.pop(context); // Close the dialog after deletion
+              },
+              child: const Text("Yes"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> updateBook(String bookId, Map<String, dynamic> updatedData) async {
@@ -121,33 +144,50 @@ class _MybooksState extends State<Mybooks> {
                                                   TextEditingController(text: ds['Description']);
                                               TextEditingController categoryController =
                                                   TextEditingController(text: ds['Category']);
+                                              TextEditingController locationController =
+                                                  TextEditingController(text: ds['Location']);
+                                              TextEditingController contactController =
+                                                  TextEditingController(text: ds['Contact Number']);
 
                                               return AlertDialog(
-                                                title: const Text("Update Book"),
-                                                content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    TextField(
-                                                      controller: nameController,
-                                                      decoration: const InputDecoration(
-                                                          labelText: "Name"),
-                                                    ),
-                                                    TextField(
-                                                      controller: authorController,
-                                                      decoration: const InputDecoration(
-                                                          labelText: "Author"),
-                                                    ),
-                                                    TextField(
-                                                      controller: descriptionController,
-                                                      decoration: const InputDecoration(
-                                                          labelText: "Description"),
-                                                    ),
-                                                    TextField(
-                                                      controller: categoryController,
-                                                      decoration: const InputDecoration(
-                                                          labelText: "Category"),
-                                                    ),
-                                                  ],
+                                                title: const Text("Update Book Details"),
+                                                content: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      TextField(
+                                                        controller: nameController,
+                                                        decoration: const InputDecoration(
+                                                            labelText: "Name"),
+                                                      ),
+                                                      TextField(
+                                                        controller: authorController,
+                                                        decoration: const InputDecoration(
+                                                            labelText: "Author"),
+                                                      ),
+                                                      TextField(
+                                                        controller: descriptionController,
+                                                        decoration: const InputDecoration(
+                                                            labelText: "Description"),
+                                                        maxLines: 3,
+                                                      ),
+                                                      TextField(
+                                                        controller: categoryController,
+                                                        decoration: const InputDecoration(
+                                                            labelText: "Category"),
+                                                      ),
+                                                      TextField(
+                                                        controller: locationController,
+                                                        decoration: const InputDecoration(
+                                                            labelText: "Location"),
+                                                      ),
+                                                      TextField(
+                                                        controller: contactController,
+                                                        decoration: const InputDecoration(
+                                                            labelText: "Contact Number"),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                                 actions: [
                                                   TextButton(
@@ -163,6 +203,8 @@ class _MybooksState extends State<Mybooks> {
                                                         "Author": authorController.text,
                                                         "Description": descriptionController.text,
                                                         "Category": categoryController.text,
+                                                        "Location": locationController.text,
+                                                        "Contact Number": contactController.text,
                                                       });
                                                       Navigator.pop(context);
                                                     },
@@ -201,10 +243,22 @@ class _MybooksState extends State<Mybooks> {
                             Text(
                               "${ds['Description']}",
                               style: const TextStyle(fontSize: 16.0),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(height: 8.0),
                             Text(
-                              "${ds['Category']}",
+                              "Category: ${ds['Category']}",
+                              style: const TextStyle(fontSize: 14.0),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              "Location: ${ds['Location']}",
+                              style: const TextStyle(fontSize: 14.0),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              "Contact: ${ds['Contact Number']}",
                               style: const TextStyle(fontSize: 14.0),
                             ),
                           ],
