@@ -1,7 +1,10 @@
 import 'package:crud/pages/addBook.dart';
+import 'package:crud/pages/bookDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud/service/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class NonFictionBooks extends StatefulWidget {
   const NonFictionBooks({super.key});
@@ -14,8 +17,15 @@ class _NonFictionBooksState extends State<NonFictionBooks> {
   Stream? BookStream;
   String searchQuery = ""; // Holds the current search text
   String selectedCategory = "Non-fiction"; // Variable for the category
+  String currentUserId = "";
+
 
   getontheload() async {
+
+      User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      currentUserId = user.uid;
+    }
     BookStream = await DatabaseMethods().getBookDetails();
     setState(() {});
   }
@@ -27,31 +37,42 @@ class _NonFictionBooksState extends State<NonFictionBooks> {
   }
 
   Widget allBookDetails() {
-    return StreamBuilder(
-      stream: BookStream,
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-          return Center(child: Text("No books available in $selectedCategory"));
-        }
+  return StreamBuilder(
+    stream: BookStream,
+    builder: (context, AsyncSnapshot snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+        return const Center(child: Text("No books available"));
+      }
 
-        // Filter books by category and search query
-        List<DocumentSnapshot> books = snapshot.data.docs;
-        List<DocumentSnapshot> filteredBooks = books.where((doc) {
-          String category = doc['Category'].toString().toLowerCase();
-          String name = doc['Name'].toString().toLowerCase();
-          return category == selectedCategory.toLowerCase() &&
-              name.contains(searchQuery.toLowerCase());
-        }).toList();
+      // Filter books
+      List<DocumentSnapshot> employees = snapshot.data.docs;
+      List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
+        String name = doc['Name'].toString().toLowerCase();
+        return name.contains(searchQuery.toLowerCase()) &&
+            doc['UploadedBy'] != currentUserId;
+      }).toList();
 
-        return filteredBooks.isNotEmpty
-            ? ListView.builder(
-                itemCount: filteredBooks.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = filteredBooks[index];
-                  return Container(
+      return filteredEmployees.isNotEmpty
+          ? ListView.builder(
+              itemCount: filteredEmployees.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot ds = filteredEmployees[index];
+                return InkWell(
+                  onTap: () {
+                    // Navigate to BookDetailsPage
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetailsPage(
+                          bookData: ds.data() as Map<String, dynamic>,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
                     margin: const EdgeInsets.only(bottom: 20.0),
                     child: Material(
                       elevation: 3.0,
@@ -87,53 +108,30 @@ class _NonFictionBooksState extends State<NonFictionBooks> {
                             const SizedBox(height: 8.0),
                             Text(
                               "By ${ds['Author']}",
-                              style: const TextStyle(fontSize: 16.0),
-                            ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              "${ds['Description']}",
                               style: const TextStyle(fontSize: 14.0),
                             ),
                             const SizedBox(height: 8.0),
                             Text(
-                              "${ds['Category']}",
+                              "${ds['Description']}",
                               style: const TextStyle(fontSize: 16.0),
                             ),
                             const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Icon(Icons.phone, color: Colors.green),
-                                const SizedBox(width: 10),
-                                Text(
-                                  "${ds['Contact Number']}",
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Icon(Icons.location_pin,
-                                    color: Colors.red),
-                                const SizedBox(width: 10),
-                                Text(
-                                  "${ds['Location']}",
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                              ],
+                            Text(
+                              "${ds['Category']}",
+                              style: const TextStyle(fontSize: 14.0),
                             ),
                           ],
                         ),
                       ),
                     ),
-                  );
-                },
-              )
-            : Center(child: Text("No matching books found in $selectedCategory"));
-      },
-    );
-  }
-
+                  ),
+                );
+              },
+            )
+          : const Center(child: Text("No matching books found"));
+    },
+  );
+}
   Widget searchBar() {
     return TextField(
       onChanged: (value) {

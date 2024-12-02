@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud/pages/addBook.dart';
+import 'package:crud/pages/bookDetailsPage.dart';
 import 'package:crud/pages/login.dart'; 
 import 'package:crud/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,31 +52,43 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Widget allEmployeeDetails() {
-    return StreamBuilder(
-      stream: BookStream,
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-          return const Center(child: Text("No books available"));
-        }
+Widget allEmployeeDetails() {
+  return StreamBuilder(
+    stream: BookStream,
+    builder: (context, AsyncSnapshot snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+        return const Center(child: Text("No books available"));
+      }
 
-        // Filter the items based on the search query and exclude books uploaded by the current user
-        List<DocumentSnapshot> employees = snapshot.data.docs;
-        List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
-          String name = doc['Name'].toString().toLowerCase();
-          return name.contains(searchQuery.toLowerCase()) &&
-              doc['UploadedBy'] != currentUserId; // Exclude current user's books
-        }).toList();
+      // Filter books
+      List<DocumentSnapshot> employees = snapshot.data.docs;
+      List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
+        String name = doc['Name'].toString().toLowerCase();
+        return name.contains(searchQuery.toLowerCase()) &&
+            doc['UploadedBy'] != currentUserId;
+      }).toList();
 
-        return filteredEmployees.isNotEmpty
-            ? ListView.builder(
-                itemCount: filteredEmployees.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = filteredEmployees[index];
-                  return Container(
+      return filteredEmployees.isNotEmpty
+          ? ListView.builder(
+              itemCount: filteredEmployees.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot ds = filteredEmployees[index];
+                return InkWell(
+                  onTap: () {
+                    // Navigate to BookDetailsPage
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetailsPage(
+                          bookData: ds.data() as Map<String, dynamic>,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
                     margin: const EdgeInsets.only(bottom: 20.0),
                     child: Material(
                       elevation: 3.0,
@@ -123,39 +136,19 @@ class _HomeState extends State<Home> {
                               "${ds['Category']}",
                               style: const TextStyle(fontSize: 14.0),
                             ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Icon(Icons.phone, color: Colors.green),
-                                const SizedBox(width: 10),
-                                Text(
-                                  "${ds['Contact Number']}",
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Icon(Icons.location_pin, color: Colors.red),
-                                const SizedBox(width: 10),
-                                Text(
-                                  "${ds['Location']}",
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
                     ),
-                  );
-                },
-              )
-            : const Center(child: Text("No matching books found"));
-      },
-    );
-  }
+                  ),
+                );
+              },
+            )
+          : const Center(child: Text("No matching books found"));
+    },
+  );
+}
+
 
   Widget searchBar() {
     return TextField(
