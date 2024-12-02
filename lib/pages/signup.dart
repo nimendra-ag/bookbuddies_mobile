@@ -38,7 +38,16 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SignUp"),
+        backgroundColor: Colors.yellow, // Set the background color to yellow
+        centerTitle: true, // Center-align the title text
+        title: const Text(
+          "Book Buddies",
+          style: TextStyle(
+            color:
+                Colors.black, // Set the text color to black for better contrast
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Center(
         child: Padding(
@@ -51,25 +60,36 @@ class _SignupPageState extends State<SignupPage> {
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 30),
-              FormContainerWidget(
+              TextField(
                 controller: _usernameController,
-                hintText: "Username",
-                isPasswordField: false,
+                decoration: InputDecoration(
+                  hintText: "Username",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
               SizedBox(height: 10),
-              FormContainerWidget(
+              TextField(
                 controller: _emailController,
-                hintText: "Email",
-                isPasswordField: false,
+                decoration: InputDecoration(
+                  hintText: "Email",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
               SizedBox(height: 10),
-              FormContainerWidget(
+              TextField(
                 controller: _nicController,
-                hintText: "NIC Number",
-                isPasswordField: false,
+                decoration: InputDecoration(
+                  hintText: "NIC Number",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
               SizedBox(height: 10),
-
               // Gender Dropdown
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -97,11 +117,17 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               ),
               SizedBox(height: 10),
-              FormContainerWidget(
+              TextField(
                 controller: _passwordController,
-                hintText: "Password",
-                isPasswordField: true,
+                obscureText: true, // This hides the text and shows it as dots
+                decoration: InputDecoration(
+                  hintText: "Password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
+
               SizedBox(height: 30),
               GestureDetector(
                 onTap: _signUp,
@@ -109,14 +135,14 @@ class _SignupPageState extends State<SignupPage> {
                   width: double.infinity,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Colors.yellow,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
                     child: Text(
                       "Sign Up",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

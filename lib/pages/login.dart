@@ -30,7 +30,16 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        backgroundColor: Colors.yellow, // Set the background color to yellow
+        centerTitle: true, // Center-align the title text
+        title: const Text(
+          "Book Buddies",
+          style: TextStyle(
+            color:
+                Colors.black, // Set the text color to black for better contrast
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Center(
         child: Padding(
@@ -38,71 +47,76 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Login",
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                height: 30,
-              ),
-              FormContainerWidget(
+              const SizedBox(height: 30),
+              TextField(
                 controller: _emailController,
-                hintText: "Email",
-                isPasswordField: false,
+                decoration: InputDecoration(
+                  hintText: "Email",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              FormContainerWidget(
+              const SizedBox(height: 10),
+              TextField(
                 controller: _passwordController,
-                hintText: "Password",
-                isPasswordField: true,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: "Password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
-              SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               GestureDetector(
                 onTap: _signIn,
                 child: Container(
                   width: double.infinity,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Colors.yellow,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Center(
-                      child: Text(
-                    "Login",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  )),
+                  child: const Center(
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Don't have an account?"),
-                  SizedBox(
-                    width: 5,
-                  ),
+                  const Text("Don't have an account?"),
+                  const SizedBox(width: 5),
                   GestureDetector(
-                      onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignupPage()),
-                            (route) => false);
-                      },
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.bold),
-                      ))
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignupPage()),
+                        (route) => false,
+                      );
+                    },
+                    child: const Text(
+                      "Sign Up",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -110,19 +124,17 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-    void _signIn() async {
-
+  void _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
 
     User? user = await _auth.signInWithEmailAndPassword(email, password);
 
-    if (user!= null){
-      print("User is successfully signedIn");
+    if (user != null) {
+      print("User is successfully signed in");
       Navigator.pushReplacementNamed(context, "/home");
-    } else{
-      print("Some error happend");
+    } else {
+      print("Some error happened");
     }
-
   }
 }

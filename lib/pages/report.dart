@@ -131,7 +131,7 @@ class _ReportPageState extends State<ReportPage> {
                         .addReportDetails(reportInfoMap, id)
                         .then((value) {
                       Fluttertoast.showToast(
-                        msg: "Book data added successfully",
+                        msg: "Reported successfully",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         backgroundColor: Colors.green,
@@ -139,15 +139,6 @@ class _ReportPageState extends State<ReportPage> {
                         fontSize: 16.0,
                       );
                     });
-
-                    Fluttertoast.showToast(
-                      msg: "Report submitted successfully",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 60),

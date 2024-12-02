@@ -10,7 +10,7 @@ class Screen3 extends StatelessWidget {
       children: [
         Image.asset('assets/Reading book-amico.png'),
         const SizedBox(height: 40),
-        const Text("We Need To Work Hard", style: TextStyle(
+        const Text("Connect & Exchange", style: TextStyle(
           color: Colors.black,
           fontSize: 25,
           fontWeight: FontWeight.w400
@@ -18,7 +18,7 @@ class Screen3 extends StatelessWidget {
         const SizedBox(height: 20),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: const Text("We Need To Work Hard, We Need To Work Hard, We Need To Work Hard", style: TextStyle(
+          child: const Text("Engage with fellow book enthusiasts, exchange books, and build a thriving literary community.", style: TextStyle(
             color: Colors.black,
             fontSize: 16,
             fontWeight: FontWeight.w300
