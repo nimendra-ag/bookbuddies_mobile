@@ -9,43 +9,94 @@ class BookDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Book Details'),
+        backgroundColor: Color.fromRGBO(254, 216, 106, 1),
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              bookData['Name'],
-              style: const TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Book Title
+              Text(
+                bookData['Name'],
+                style: const TextStyle(
+                  fontSize: 28.0,
+                  color: Color.fromRGBO(0, 11, 88, 1),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            Text("By ${bookData['Author']}"),
-            const SizedBox(height: 8.0),
-            Text(bookData['Description']),
-            const SizedBox(height: 8.0),
-            Text("Category: ${bookData['Category']}"),
-            const SizedBox(height: 16.0),
-            Row(
-              children: [
-                const Icon(Icons.phone, color: Colors.green),
-                const SizedBox(width: 10),
-                Text("${bookData['Contact Number']}"),
-              ],
-            ),
-            const SizedBox(height: 8.0),
-            Row(
-              children: [
-                const Icon(Icons.location_pin, color: Colors.red),
-                const SizedBox(width: 10),
-                Text("${bookData['Location']}"),
-              ],
-            ),
-          ],
+              const SizedBox(height: 10.0),
+
+              // Author Name
+              Text(
+                "By ${bookData['Author']}",
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Color.fromRGBO(131, 139, 227, 1),
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+
+              // Description
+              Container(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  bookData['Description'],
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Color.fromRGBO(0, 11, 88, 1),
+                  ),
+                  textAlign: TextAlign.justify,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+
+              // Category
+              Text(
+                "Category: ${bookData['Category']}",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Color.fromRGBO(131, 139, 227, 1),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+
+              // Contact Information
+              Row(
+                children: [
+                  const Icon(Icons.phone, color: Colors.green, size: 24),
+                  const SizedBox(width: 10),
+                  Text(
+                    "${bookData['Contact Number']}",
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Color.fromRGBO(0, 11, 88, 1),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16.0),
+
+              // Location
+              Row(
+                children: [
+                  const Icon(Icons.location_pin, color: Colors.red, size: 24),
+                  const SizedBox(width: 10),
+                  Text(
+                    "${bookData['Location']}",
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Color.fromRGBO(0, 11, 88, 1),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
