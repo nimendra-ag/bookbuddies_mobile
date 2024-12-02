@@ -1,3 +1,4 @@
+import 'package:crud/Screens/IntroScreens.dart';
 import 'package:crud/pages/home.dart';
 import 'package:crud/pages/login.dart';
 import 'package:crud/pages/signup.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => LoginPage(),
+        '/': (context) => Introscreens(),
         '/signUp': (context) => SignupPage(),
         '/home': (context) => MainNavigationBar(),
       },
