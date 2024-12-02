@@ -8,7 +8,7 @@ class Screen3 extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset('assets/Reading book-pana.png'),
+        Image.asset('assets/Reading book-amico.png'),
         const SizedBox(height: 40),
         const Text("We Need To Work Hard", style: TextStyle(
           color: Colors.black,
