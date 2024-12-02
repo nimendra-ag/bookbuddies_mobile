@@ -1,20 +1,22 @@
+
 import 'package:crud/pages/bookDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class ScienceBooks extends StatefulWidget {
-  const ScienceBooks({super.key});
+
+class HistoryBooks extends StatefulWidget {
+  const HistoryBooks({super.key});
 
   @override
-  State<ScienceBooks> createState() => _ScienceBooksState();
+  State<HistoryBooks> createState() => _HistoryBooksState();
 }
 
-class _ScienceBooksState extends State<ScienceBooks> {
+class _HistoryBooksState extends State<HistoryBooks> {
   Stream? bookStream;
   String searchQuery = ""; // Holds the current search text
-  String selectedCategory = "Science"; // Filter category
+  String selectedCategory = "History"; // Filter category
   String currentUserId = "";
 
   Future<void> getontheload() async {
@@ -201,7 +203,7 @@ class _ScienceBooksState extends State<ScienceBooks> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Science Books',
+          'History Books',
           style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,

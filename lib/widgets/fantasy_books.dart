@@ -4,17 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class ScienceBooks extends StatefulWidget {
-  const ScienceBooks({super.key});
+class FantasyBooks extends StatefulWidget {
+  const FantasyBooks({super.key});
 
   @override
-  State<ScienceBooks> createState() => _ScienceBooksState();
+  State<FantasyBooks> createState() => _FantasyBooksState();
 }
 
-class _ScienceBooksState extends State<ScienceBooks> {
+class _FantasyBooksState extends State<FantasyBooks> {
   Stream? bookStream;
   String searchQuery = ""; // Holds the current search text
-  String selectedCategory = "Science"; // Filter category
+  String selectedCategory = "Fantasy"; // Filter category
   String currentUserId = "";
 
   Future<void> getontheload() async {
@@ -201,7 +201,7 @@ class _ScienceBooksState extends State<ScienceBooks> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Science Books',
+          'Fantasy Books',
           style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,

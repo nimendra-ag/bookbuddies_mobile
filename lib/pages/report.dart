@@ -1,33 +1,31 @@
 import 'package:crud/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:random_string/random_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:random_string/random_string.dart';
 
-class Book extends StatefulWidget {
-  const Book({super.key});
+class ReportPage extends StatefulWidget {
+  const ReportPage({super.key});
 
   @override
-  State<Book> createState() => _BookState();
+  State<ReportPage> createState() => _ReportPageState();
 }
 
-class _BookState extends State<Book> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController authorController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+class _ReportPageState extends State<ReportPage> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+  String? selectedType; // Selected type for the dropdown
 
-  String? selectedCategory; // Selected category for the dropdown
-  final List<String> categories = [
-    "Fiction",
-    "Non-Fiction",
-    "Science",
-    "Biography",
-    "Fantasy",
-    "Mystery",
-    "History",
-  ]; // Predefined list of categories
+  final List<String> reportTypes = [
+    "Fraud",
+    "Theft",
+    "Harassment",
+    "Vandalism",
+    "Assault",
+    "Other",
+  ]; // Predefined list of report types
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class _BookState extends State<Book> {
         ),
         centerTitle: true,
         title: const Text(
-          'Add a New Book',
+          'Submit a Report',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
@@ -52,36 +50,28 @@ class _BookState extends State<Book> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildTextField(
-                label: "Name",
-                icon: Icons.person,
-                controller: nameController,
-                hintText: "Enter the name of the book",
+                label: "Title",
+                icon: Icons.title,
+                controller: titleController,
+                hintText: "Enter the title of the report",
               ),
               const SizedBox(height: 20),
               buildTextField(
-                label: "Author",
-                icon: Icons.edit,
-                controller: authorController,
-                hintText: "Enter the author's name",
-              ),
-              const SizedBox(height: 20),
-              buildTextField(
-                label: "Description",
+                label: "Details",
                 icon: Icons.description,
-                controller: descriptionController,
-                hintText: "Enter a brief description",
-                keyboardType: TextInputType.multiline,
-                maxLines: 5, // Multi-line text area
+                controller: detailsController,
+                hintText: "Enter detailed information about the incident",
+                maxLines: 5,
               ),
               const SizedBox(height: 20),
               buildDropdownField(
-                label: "Category",
+                label: "Type of Incident",
                 icon: Icons.category,
-                items: categories,
-                value: selectedCategory,
+                items: reportTypes,
+                value: selectedType,
                 onChanged: (value) {
                   setState(() {
-                    selectedCategory = value!;
+                    selectedType = value!;
                   });
                 },
               ),
@@ -90,7 +80,7 @@ class _BookState extends State<Book> {
                 label: "Contact Number",
                 icon: Icons.phone,
                 controller: contactNumberController,
-                hintText: "Enter contact number",
+                hintText: "Enter your contact number",
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 20),
@@ -98,15 +88,15 @@ class _BookState extends State<Book> {
                 label: "Location",
                 icon: Icons.location_on,
                 controller: locationController,
-                hintText: "Enter the location",
+                hintText: "Enter the location of the incident",
               ),
               const SizedBox(height: 30),
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (selectedCategory == null) {
+                    if (selectedType == null) {
                       Fluttertoast.showToast(
-                        msg: "Please select a category",
+                        msg: "Please select the type of incident",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         backgroundColor: Color.fromRGBO(254, 216, 106, 1),
@@ -116,31 +106,29 @@ class _BookState extends State<Book> {
                       return;
                     }
 
-                    String id = randomAlphaNumeric(10);
                     String userId = FirebaseAuth.instance.currentUser!.uid; // Get current user ID
+                    String id = randomAlphaNumeric(10);
 
-                    Map<String, dynamic> bookInfoMap = {
-                      "Name": nameController.text,
-                      "Author": authorController.text,
-                      "Id": id,
-                      "Description": descriptionController.text,
-                      "Category": selectedCategory,
+                    Map<String, dynamic> reportInfoMap = {
+                      "Title": titleController.text,
+                      "Details": detailsController.text,
+                      "Type": selectedType,
                       "Contact Number": contactNumberController.text,
                       "Location": locationController.text,
-                      "UploadedBy": userId, // Add the current user's ID
+                      "ReportedBy": userId, // Add the current user's ID
+                      "Timestamp": DateTime.now().toIso8601String(), // Optional: Add timestamp
                     };
 
-                    nameController.clear();
-                    authorController.clear();
-                    descriptionController.clear();
+                    titleController.clear();
+                    detailsController.clear();
                     contactNumberController.clear();
                     locationController.clear();
                     setState(() {
-                      selectedCategory = null;
+                      selectedType = null;
                     });
 
                     await DatabaseMethods()
-                        .addBookDetails(bookInfoMap, id)
+                        .addReportDetails(reportInfoMap, id)
                         .then((value) {
                       Fluttertoast.showToast(
                         msg: "Book data added successfully",
@@ -151,6 +139,15 @@ class _BookState extends State<Book> {
                         fontSize: 16.0,
                       );
                     });
+
+                    Fluttertoast.showToast(
+                      msg: "Report submitted successfully",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 60),
@@ -174,7 +171,7 @@ class _BookState extends State<Book> {
                       ),
                       alignment: Alignment.center,
                       child: const Text(
-                        "Add",
+                        "Submit",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -198,7 +195,7 @@ class _BookState extends State<Book> {
     required TextEditingController controller,
     String? hintText,
     TextInputType keyboardType = TextInputType.text,
-    int maxLines = 1, // Added parameter for multiline input
+    int maxLines = 1,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +217,7 @@ class _BookState extends State<Book> {
           child: TextField(
             controller: controller,
             keyboardType: keyboardType,
-            maxLines: maxLines, // Set maxLines to make it multiline
+            maxLines: maxLines,
             decoration: InputDecoration(
               prefixIcon: Icon(icon, color: Colors.grey),
               hintText: hintText,
@@ -262,13 +259,13 @@ class _BookState extends State<Book> {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: value,
-              hint: const Text("Select a category"),
+              hint: const Text("Select a type"),
               icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
               isExpanded: true,
               items: items
-                  .map((category) => DropdownMenuItem<String>(
-                        value: category,
-                        child: Text(category),
+                  .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(item),
                       ))
                   .toList(),
               onChanged: onChanged,

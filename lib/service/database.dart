@@ -18,4 +18,10 @@ class DatabaseMethods {
         .doc(id)
         .set(userInfoMap);
   }
+  Future addReportDetails(Map<String, dynamic> userInfoMap, String id) async {
+    return await FirebaseFirestore.instance
+        .collection("Report")
+        .doc(id)
+        .set(userInfoMap);
+  }
 }
