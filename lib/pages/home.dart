@@ -72,7 +72,13 @@ Widget allEmployeeDetails() {
       }).toList();
 
       return filteredEmployees.isNotEmpty
-          ? ListView.builder(
+          ? GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Two columns
+                crossAxisSpacing: 10.0, // Space between columns
+                mainAxisSpacing: 10.0, // Space between rows
+                childAspectRatio: 0.75, // Adjust card height-to-width ratio
+              ),
               itemCount: filteredEmployees.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot ds = filteredEmployees[index];
@@ -88,56 +94,53 @@ Widget allEmployeeDetails() {
                       ),
                     );
                   },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 20.0),
-                    child: Material(
-                      elevation: 3.0,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Icon(
-                                    Icons.book,
-                                    color: Colors.blue.shade400,
-                                    size: 30.0,
-                                  ),
-                                ),
-                                Text(
-                                  "${ds['Name']}",
-                                  style: const TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                  child: Material(
+                    elevation: 3.0,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Icon(
+                              Icons.book,
+                              color: Colors.blue.shade400,
+                              size: 30.0,
                             ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              "By ${ds['Author']}",
-                              style: const TextStyle(fontSize: 14.0),
+                          ),
+                          Text(
+                            "${ds['Name']}",
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(height: 8.0),
-                            Text(
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            "By ${ds['Author']}",
+                            style: const TextStyle(fontSize: 14.0),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Expanded(
+                            child: Text(
                               "${ds['Description']}",
                               style: const TextStyle(fontSize: 16.0),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 4,
                             ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              "${ds['Category']}",
-                              style: const TextStyle(fontSize: 14.0),
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            "${ds['Category']}",
+                            style: const TextStyle(fontSize: 14.0),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -148,6 +151,7 @@ Widget allEmployeeDetails() {
     },
   );
 }
+
 
 
   Widget searchBar() {
