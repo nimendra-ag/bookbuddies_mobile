@@ -9,7 +9,7 @@ class BookDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(254, 216, 106, 1),
+        backgroundColor: const Color.fromRGBO(254, 216, 106, 1),
 
       ),
       body: Padding(
@@ -32,7 +32,7 @@ class BookDetailsPage extends StatelessWidget {
               // Author Name
               Text(
                 "By ${bookData['Author']}",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18.0,
                   color: Color.fromRGBO(131, 139, 227, 1),
                   fontStyle: FontStyle.italic,
@@ -57,7 +57,7 @@ class BookDetailsPage extends StatelessWidget {
               // Category
               Text(
                 "Category: ${bookData['Category']}",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                   color: Color.fromRGBO(131, 139, 227, 1),
                   fontWeight: FontWeight.bold,

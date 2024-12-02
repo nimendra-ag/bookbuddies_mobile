@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crud/pages/addBook.dart';
 import 'package:crud/pages/bookDetailsPage.dart';
 import 'package:crud/pages/login.dart';
 import 'package:crud/service/database.dart';
@@ -52,7 +51,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Widget allEmployeeDetails() {
+  Widget allBookDetails() {
     return StreamBuilder(
       stream: BookStream,
       builder: (context, AsyncSnapshot snapshot) {
@@ -64,14 +63,14 @@ class _HomeState extends State<Home> {
         }
 
         // Filter books
-        List<DocumentSnapshot> employees = snapshot.data.docs;
-        List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
+        List<DocumentSnapshot> books = snapshot.data.docs;
+        List<DocumentSnapshot> filteredBooks = books.where((doc) {
           String name = doc['Name'].toString().toLowerCase();
           return name.contains(searchQuery.toLowerCase()) &&
               doc['UploadedBy'] != currentUserId;
         }).toList();
 
-        return filteredEmployees.isNotEmpty
+        return filteredBooks.isNotEmpty
             ? GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // Two columns
@@ -79,9 +78,9 @@ class _HomeState extends State<Home> {
                   mainAxisSpacing: 10.0, // Space between rows
                   childAspectRatio: 0.75, // Adjust card height-to-width ratio
                 ),
-                itemCount: filteredEmployees.length,
+                itemCount: filteredBooks.length,
                 itemBuilder: (context, index) {
-                  DocumentSnapshot ds = filteredEmployees[index];
+                  DocumentSnapshot ds = filteredBooks[index];
                   return InkWell(
                     onTap: () {
                       // Navigate to BookDetailsPage
@@ -162,7 +161,7 @@ class _HomeState extends State<Home> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0, vertical: 4.0),
                                   decoration: BoxDecoration(
-                                    color: Color.fromRGBO(254, 216, 106,
+                                    color: const Color.fromRGBO(254, 216, 106,
                                         1.0), // Background color for the location
                                     borderRadius: BorderRadius.circular(
                                         12.0), // Rounded corners
@@ -202,7 +201,7 @@ class _HomeState extends State<Home> {
         prefixIcon: const Icon(Icons.search),
         hintText: "Search by book name",
         filled: true,
-        fillColor: Color.fromRGBO(242, 242, 242, 1),
+        fillColor: const Color.fromRGBO(242, 242, 242, 1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
@@ -240,7 +239,7 @@ class _HomeState extends State<Home> {
             const SizedBox(height: 10.0),
             searchBar(),
             const SizedBox(height: 20.0),
-            Expanded(child: allEmployeeDetails()),
+            Expanded(child: allBookDetails()),
           ],
         ),
       ),

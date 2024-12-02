@@ -84,7 +84,7 @@ class _MybooksState extends State<Mybooks> {
     }
   }
 
-  Widget allEmployeeDetails() {
+  Widget allBookDetails() {
     return StreamBuilder(
       stream: BookStream,
       builder: (context, AsyncSnapshot snapshot) {
@@ -96,18 +96,18 @@ class _MybooksState extends State<Mybooks> {
         }
 
         // Filter the items based on the search query and exclude books not uploaded by the current user
-        List<DocumentSnapshot> employees = snapshot.data.docs;
-        List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
+        List<DocumentSnapshot> books = snapshot.data.docs;
+        List<DocumentSnapshot> filteredBooks = books.where((doc) {
           String name = doc['Name'].toString().toLowerCase();
           return name.contains(searchQuery.toLowerCase()) &&
               doc['UploadedBy'] == currentUserId; // Show only current user's books
         }).toList();
 
-        return filteredEmployees.isNotEmpty
+        return filteredBooks.isNotEmpty
             ? ListView.builder(
-                itemCount: filteredEmployees.length,
+                itemCount: filteredBooks.length,
                 itemBuilder: (context, index) {
-                  DocumentSnapshot ds = filteredEmployees[index];
+                  DocumentSnapshot ds = filteredBooks[index];
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20.0),
                     child: Material(
@@ -309,7 +309,7 @@ class _MybooksState extends State<Mybooks> {
           children: [
             searchBar(),
             const SizedBox(height: 10.0),
-            Expanded(child: allEmployeeDetails()),
+            Expanded(child: allBookDetails()),
           ],
         ),
       ),

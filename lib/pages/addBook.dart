@@ -47,7 +47,7 @@ class _BookState extends State<Book> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Container(
-          color: Color.fromRGBO(246, 246, 246, 1), // Updated background color
+          color: const Color.fromRGBO(246, 246, 246, 1), // Updated background color
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -109,7 +109,7 @@ class _BookState extends State<Book> {
                         msg: "Please select a category",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
-                        backgroundColor: Color.fromRGBO(254, 216, 106, 1),
+                        backgroundColor: const Color.fromRGBO(254, 216, 106, 1),
                         textColor: Colors.white,
                         fontSize: 16.0,
                       );
@@ -165,7 +165,7 @@ class _BookState extends State<Book> {
                   ),
                   child: Ink(
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(254, 216, 106, 1),
+                      color: const Color.fromRGBO(254, 216, 106, 1),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Container(

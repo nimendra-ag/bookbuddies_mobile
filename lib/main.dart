@@ -1,5 +1,4 @@
 import 'package:crud/Screens/IntroScreens.dart';
-import 'package:crud/pages/home.dart';
 import 'package:crud/pages/signup.dart';
 import 'package:crud/widgets/navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,9 +19,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/intro': (context) => Introscreens(),
-        '/signUp': (context) => SignupPage(),
-        '/home': (context) => MainNavigationBar(),
+        '/intro': (context) => const Introscreens(),
+        '/signUp': (context) => const SignupPage(),
+        '/home': (context) => const MainNavigationBar(),
       },
       home: const SplashScreen(),
     );
@@ -41,43 +40,65 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Navigate to Introscreens() after 3 seconds
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 4), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Introscreens()),
+        MaterialPageRoute(builder: (context) => const Introscreens()),
       );
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Book',
-              style: TextStyle(
-                fontSize: 55,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-                letterSpacing: 1.0,
+@override
+Widget build(BuildContext context) {
+  return const Scaffold(
+    backgroundColor: Colors.yellow,
+    body: Stack(
+      children: [
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'BOOK',
+                style: TextStyle(
+                  fontSize: 55,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                  letterSpacing: 1.0,
+                ),
               ),
-            ),
-            Text(
-              'Buddies',
-              style: TextStyle(
-                fontSize: 50,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-                letterSpacing: 1.0,
+              Text(
+                'Buddies',
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                  letterSpacing: 1.0,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+        Positioned(
+          bottom: 50, // Adjust the distance from the bottom
+          left: 0,
+          right: 0,
+          child: Text(
+            "Let's Read Together...",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+              letterSpacing: 1.0,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+
 }

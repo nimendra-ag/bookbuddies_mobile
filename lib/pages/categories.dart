@@ -15,13 +15,13 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
-  FictionBooks fictionBooks = FictionBooks();
-  NonFictionBooks nonFictionBooks = NonFictionBooks();
-  ScienceBooks scienceBooks = ScienceBooks();
-  BiographyBooks biographyBooks = BiographyBooks();
-  FantasyBooks fantasyBooks = FantasyBooks();
-  HistoryBooks historyBooks = HistoryBooks();
-  MysteryBooks mysteryBooks = MysteryBooks();
+  FictionBooks fictionBooks = const FictionBooks();
+  NonFictionBooks nonFictionBooks = const NonFictionBooks();
+  ScienceBooks scienceBooks = const ScienceBooks();
+  BiographyBooks biographyBooks = const BiographyBooks();
+  FantasyBooks fantasyBooks = const FantasyBooks();
+  HistoryBooks historyBooks = const HistoryBooks();
+  MysteryBooks mysteryBooks = const MysteryBooks();
 
   @override
   Widget build(BuildContext context) {

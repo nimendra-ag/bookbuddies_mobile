@@ -40,9 +40,10 @@ class _IntroscreensState extends State<Introscreens> {
               children: [
                 GestureDetector(
                   onTap: () {
-                      Navigator.push(
+                      Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        (route) => false
                       );
                   },
                   child: Text(buttonText),
