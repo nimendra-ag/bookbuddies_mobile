@@ -88,39 +88,81 @@ class _NonFictionBooksState extends State<NonFictionBooks> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Icon(
-                                Icons.book,
-                                color: Colors.blue.shade400,
-                                size: 30.0,
-                              ),
-                            ),
                             Text(
                               "${ds['Name']}",
                               style: const TextStyle(
                                 fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(0, 11, 88, 1),
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             const SizedBox(height: 8.0),
-                            Text(
-                              "By ${ds['Author']}",
-                              style: const TextStyle(fontSize: 14.0),
+                            RichText(
+                              text: TextSpan(
+                                text: 'By ', // "By" is not italicized
+                                style: const TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors
+                                      .black, // Ensure proper color is applied
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: ds['Author'], // Author name
+                                    style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: Color.fromRGBO(131, 139, 227, 1),
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold
+                                        // Italicized style for the author's name
+                                        ),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 8.0),
                             Expanded(
                               child: Text(
                                 "${ds['Description']}",
-                                style: const TextStyle(fontSize: 16.0),
+                                style: const TextStyle(
+                                  fontSize: 13.0,
+                                  color: Color.fromRGBO(13, 13, 14, 0.694),
+                                ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
                               ),
                             ),
                             const SizedBox(height: 8.0),
-                            Text(
-                              "${ds['Category']}",
-                              style: const TextStyle(fontSize: 14.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "${ds['Category']}",
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                    color: Color.fromRGBO(0, 103, 105,
+                                        1.0), // Blue color for category
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(254, 216, 106,
+                                        1.0), // Background color for the location
+                                    borderRadius: BorderRadius.circular(
+                                        12.0), // Rounded corners
+                                  ),
+                                  child: Text(
+                                    "${ds['Location']}",
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors
+                                          .black, // Text color for visibility
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

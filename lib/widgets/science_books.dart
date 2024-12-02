@@ -14,7 +14,7 @@ class ScienceBooks extends StatefulWidget {
 class _ScienceBooksState extends State<ScienceBooks> {
   Stream? bookStream;
   String searchQuery = ""; // Holds the current search text
-  String selectedCategory = "Non-Fiction"; // Filter category
+  String selectedCategory = "Science"; // Filter category
   String currentUserId = "";
 
   Future<void> getontheload() async {

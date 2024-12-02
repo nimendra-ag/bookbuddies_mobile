@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud/pages/addBook.dart';
 import 'package:crud/pages/bookDetailsPage.dart';
-import 'package:crud/pages/login.dart'; 
+import 'package:crud/pages/login.dart';
 import 'package:crud/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Stream? BookStream;
-  String searchQuery = ""; 
+  String searchQuery = "";
   String currentUserId = "";
 
   getontheload() async {
@@ -52,107 +52,144 @@ class _HomeState extends State<Home> {
     }
   }
 
-Widget allEmployeeDetails() {
-  return StreamBuilder(
-    stream: BookStream,
-    builder: (context, AsyncSnapshot snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-        return const Center(child: Text("No books available"));
-      }
+  Widget allEmployeeDetails() {
+    return StreamBuilder(
+      stream: BookStream,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+          return const Center(child: Text("No books available"));
+        }
 
-      // Filter books
-      List<DocumentSnapshot> employees = snapshot.data.docs;
-      List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
-        String name = doc['Name'].toString().toLowerCase();
-        return name.contains(searchQuery.toLowerCase()) &&
-            doc['UploadedBy'] != currentUserId;
-      }).toList();
+        // Filter books
+        List<DocumentSnapshot> employees = snapshot.data.docs;
+        List<DocumentSnapshot> filteredEmployees = employees.where((doc) {
+          String name = doc['Name'].toString().toLowerCase();
+          return name.contains(searchQuery.toLowerCase()) &&
+              doc['UploadedBy'] != currentUserId;
+        }).toList();
 
-      return filteredEmployees.isNotEmpty
-          ? GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Two columns
-                crossAxisSpacing: 10.0, // Space between columns
-                mainAxisSpacing: 10.0, // Space between rows
-                childAspectRatio: 0.75, // Adjust card height-to-width ratio
-              ),
-              itemCount: filteredEmployees.length,
-              itemBuilder: (context, index) {
-                DocumentSnapshot ds = filteredEmployees[index];
-                return InkWell(
-                  onTap: () {
-                    // Navigate to BookDetailsPage
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BookDetailsPage(
-                          bookData: ds.data() as Map<String, dynamic>,
+        return filteredEmployees.isNotEmpty
+            ? GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Two columns
+                  crossAxisSpacing: 10.0, // Space between columns
+                  mainAxisSpacing: 10.0, // Space between rows
+                  childAspectRatio: 0.75, // Adjust card height-to-width ratio
+                ),
+                itemCount: filteredEmployees.length,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot ds = filteredEmployees[index];
+                  return InkWell(
+                    onTap: () {
+                      // Navigate to BookDetailsPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookDetailsPage(
+                            bookData: ds.data() as Map<String, dynamic>,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Material(
+                      elevation: 3.0,
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${ds['Name']}",
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                color: Color.fromRGBO(0, 11, 88, 1),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            RichText(
+                              text: TextSpan(
+                                text: 'By ', // "By" is not italicized
+                                style: const TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors
+                                      .black, // Ensure proper color is applied
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: ds['Author'], // Author name
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                      color: Color.fromRGBO(131, 139, 227, 1),
+                                      fontStyle: FontStyle
+                                          .italic, fontWeight: FontWeight.bold
+                                          // Italicized style for the author's name
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Expanded(
+                              child: Text(
+                                "${ds['Description']}",
+                                style: const TextStyle(fontSize: 13.0, color: Color.fromRGBO(13, 13, 14, 0.694),),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 4,
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "${ds['Category']}",
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                    color: Color.fromRGBO(0, 103, 105,
+                                        1.0), // Blue color for category
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(254, 216, 106,
+                                        1.0), // Background color for the location
+                                    borderRadius: BorderRadius.circular(
+                                        12.0), // Rounded corners
+                                  ),
+                                  child: Text(
+                                    "${ds['Location']}",
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors
+                                          .black, // Text color for visibility
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                  child: Material(
-                    elevation: 3.0,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Icon(
-                              Icons.book,
-                              color: Colors.blue.shade400,
-                              size: 30.0,
-                            ),
-                          ),
-                          Text(
-                            "${ds['Name']}",
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            "By ${ds['Author']}",
-                            style: const TextStyle(fontSize: 14.0),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Expanded(
-                            child: Text(
-                              "${ds['Description']}",
-                              style: const TextStyle(fontSize: 16.0),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 4,
-                            ),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            "${ds['Category']}",
-                            style: const TextStyle(fontSize: 14.0),
-                          ),
-                        ],
-                      ),
                     ),
-                  ),
-                );
-              },
-            )
-          : const Center(child: Text("No matching books found"));
-    },
-  );
-}
-
-
+                  );
+                },
+              )
+            : const Center(child: Text("No matching books found"));
+      },
+    );
+  }
 
   Widget searchBar() {
     return TextField(
@@ -163,11 +200,11 @@ Widget allEmployeeDetails() {
       },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search),
-        hintText: "Search by book",
+        hintText: "Search by book name",
         filled: true,
-        fillColor: Colors.grey.shade200,
+        fillColor: Color.fromRGBO(242, 242, 242, 1),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
         ),
       ),
@@ -177,8 +214,12 @@ Widget allEmployeeDetails() {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            color: Color.fromRGBO(254, 216, 106, 1), // Updated app bar color
+          ),
+        ),
         title: const Text(
           'Book Buddies',
           style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
@@ -196,8 +237,9 @@ Widget allEmployeeDetails() {
         margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Column(
           children: [
-            searchBar(),
             const SizedBox(height: 10.0),
+            searchBar(),
+            const SizedBox(height: 20.0),
             Expanded(child: allEmployeeDetails()),
           ],
         ),
