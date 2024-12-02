@@ -180,17 +180,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Book()),
-          );
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-        tooltip: "Add New Book",
-      ),
+
       appBar: AppBar(
         title: const Text(
           'Book Buddies',

@@ -157,17 +157,7 @@ class _NonFictionBooksState extends State<NonFictionBooks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Book()),
-          );
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-        tooltip: "Add New Book",
-      ),
+      
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Column(
