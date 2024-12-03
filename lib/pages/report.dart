@@ -20,7 +20,7 @@ class _ReportPageState extends State<ReportPage> {
 
   final List<String> reportTypes = [
     "Fraud",
-    "Theft",
+    "Book not returned",
     "Harassment",
     "Vandalism",
     "Assault",
@@ -38,7 +38,7 @@ class _ReportPageState extends State<ReportPage> {
         ),
         centerTitle: true,
         title: const Text(
-          'Submit a Report',
+          'Report',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
