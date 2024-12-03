@@ -18,7 +18,6 @@ class _HomeState extends State<Home> {
   String currentUserId = "";
 
   getontheload() async {
-    // Get the current user ID from FirebaseAuth
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       currentUserId = user.uid;
@@ -38,7 +37,6 @@ class _HomeState extends State<Home> {
   Future<void> signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      // Navigate to the login page after signing out
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -73,10 +71,10 @@ class _HomeState extends State<Home> {
         return filteredBooks.isNotEmpty
             ? GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Two columns
-                  crossAxisSpacing: 10.0, // Space between columns
-                  mainAxisSpacing: 10.0, // Space between rows
-                  childAspectRatio: 0.75, // Adjust card height-to-width ratio
+                  crossAxisCount: 2, 
+                  crossAxisSpacing: 10.0, 
+                  mainAxisSpacing: 10.0, 
+                  childAspectRatio: 0.75, 
                 ),
                 itemCount: filteredBooks.length,
                 itemBuilder: (context, index) {
@@ -120,17 +118,17 @@ class _HomeState extends State<Home> {
                                 style: const TextStyle(
                                   fontSize: 14.0,
                                   color: Colors
-                                      .black, // Ensure proper color is applied
+                                      .black, 
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: ds['Author'], // Author name
+                                    text: ds['Author'], 
                                     style: const TextStyle(
                                       fontSize: 14.0,
                                       color: Color.fromRGBO(131, 139, 227, 1),
                                       fontStyle: FontStyle
                                           .italic, fontWeight: FontWeight.bold
-                                          // Italicized style for the author's name
+                                          
                                     ),
                                   ),
                                 ],
@@ -154,7 +152,7 @@ class _HomeState extends State<Home> {
                                   style: const TextStyle(
                                     fontSize: 14.0,
                                     color: Color.fromRGBO(0, 103, 105,
-                                        1.0), // Blue color for category
+                                        1.0), 
                                   ),
                                 ),
                                 Container(
@@ -162,9 +160,9 @@ class _HomeState extends State<Home> {
                                       horizontal: 8.0, vertical: 4.0),
                                   decoration: BoxDecoration(
                                     color: const Color.fromRGBO(254, 216, 106,
-                                        1.0), // Background color for the location
+                                        1.0), 
                                     borderRadius: BorderRadius.circular(
-                                        12.0), // Rounded corners
+                                        12.0), 
                                   ),
                                   child: Text(
                                     "${ds['Location']}",
@@ -172,7 +170,7 @@ class _HomeState extends State<Home> {
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w600,
                                       color: Colors
-                                          .black, // Text color for visibility
+                                          .black, 
                                     ),
                                   ),
                                 ),
