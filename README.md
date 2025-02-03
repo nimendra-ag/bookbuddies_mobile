@@ -48,7 +48,7 @@
 
 ## 📷 Screenshots
 
-_Add screenshots of the app interface here._
+
 
 ---
 
@@ -61,13 +61,6 @@ Music from [Uppbeat](https://uppbeat.io) (free for Creators!)
 
 ## 👥 Contributors
 
-- **[Your Name]** – Developer
-- **[Siyathma Wedamulla]** – Developer
-
+- **Nimendra Gunwardana** – Developer
+- **Siyathma Wedamulla** – Developer
 ---
-
-## 📬 Contact
-
-For any queries or contributions, feel free to reach out!  
-📧 Email: [your.email@example.com]  
-🌐 LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
